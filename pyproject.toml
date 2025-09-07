@@ -5,12 +5,12 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pycrypto_rsa_legacy"
-version = "0.42"
+version = "0.1.0"
 
 [tool.setuptools.packages.find]
 where = ["src"]
 
 [tool.setuptools]
 ext-modules = [
-  {name = "_pycrypto_rsa_legacy", sources = ["src/pycrypto_rsa_legacy/_rsa.c"]}
+  {name = "_pycrypto_rsa_legacy", sources = ["src/pycrypto_rsa_legacy/_rsa.c"], optional = true, libraries = ["gmp"]}
 ]
