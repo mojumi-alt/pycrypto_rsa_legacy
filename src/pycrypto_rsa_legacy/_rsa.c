@@ -44,6 +44,16 @@
     return 0;                                                                  \
   }
 
+#if PY_MAJOR_VERSION == 3 && PY_MINOR_VERSION >= 13
+#define PYTHON_LONG_TO_BYTES(value, target, byte_count)                        \
+  {PyLong_AsNativeBytes(value, target, byte_count,                             \
+                        Py_ASNATIVEBYTES_BIG_ENDIAN |                          \
+                            Py_ASNATIVEBYTES_UNSIGNED_BUFFER) < 0}
+#else
+#define PYTHON_LONG_TO_BYTES(value, target, byte_count)                        \
+  {_PyLong_AsByteArray((PyLongObject *)value, target, byte_count, 0, 0) > 0}
+#endif
+
 typedef struct {
   PyObject_HEAD mpz_t n;
   mpz_t e;
@@ -61,8 +71,8 @@ static PyObject *importPyObjectToMpz(PyObject *value, mpz_t target) {
   if (value_as_bytes == NULL) {
     return PyErr_NoMemory();
   }
-  int err = _PyLong_AsByteArray((PyLongObject *)value, value_as_bytes,
-                                byte_count, 0, 0);
+  int err = PYTHON_LONG_TO_BYTES(value, value_as_bytes, byte_count);
+
   if (err) {
     PyMem_FREE(value_as_bytes);
     PyErr_SetString(PyExc_ValueError, "Could not convert argument to bytes!");
