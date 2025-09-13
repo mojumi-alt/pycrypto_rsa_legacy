@@ -1,4 +1,4 @@
-from _pycrypto_rsa_legacy import PlainRSAKey
+from pycrypto_rsa_legacy import NativeRSAKey as PlainRSAKey
 from base import AbstractTests
 
 

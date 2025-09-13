@@ -1,16 +1,7 @@
-# pyproject.toml
 [build-system]
-requires = ["setuptools"]
-build-backend = "setuptools.build_meta"
+build-backend = 'mesonpy'
+requires = ['meson-python']
 
 [project]
 name = "pycrypto_rsa_legacy"
 version = "0.1.0"
-
-[tool.setuptools.packages.find]
-where = ["src"]
-
-[tool.setuptools]
-ext-modules = [
-  {name = "_pycrypto_rsa_legacy", sources = ["src/pycrypto_rsa_legacy/_rsa.c"], optional = true, libraries = ["gmp"]}
-]

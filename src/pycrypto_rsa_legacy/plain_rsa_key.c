@@ -1,3 +1,4 @@
+// SPDX - License - Identifier : LGPL-3.0
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
 #include <gmp.h>
@@ -452,7 +453,7 @@ static PyGetSetDef PlainRSAKey_getsetters[] = {
 
 static PyTypeObject PlainRSAKey_type = {
     .ob_base = PyVarObject_HEAD_INIT(NULL, 0).tp_name =
-        "_pycrypto_rsa_legacy.PlainRSAKey",
+        "_plain_rsa_key.PlainRSAKey",
     .tp_doc = PyDoc_STR("End me"),
     .tp_basicsize = sizeof(PlainRSAKey),
     .tp_itemsize = 0,
@@ -463,7 +464,7 @@ static PyTypeObject PlainRSAKey_type = {
     .tp_methods = PlainRSAKey_methods,
     .tp_getset = PlainRSAKey_getsetters};
 
-static int pycrypto_rsa_legacy_module_exec(PyObject *m) {
+static int plain_rsa_key_module_exec(PyObject *m) {
   if (PyType_Ready(&PlainRSAKey_type) < 0) {
     return -1;
   }
@@ -476,19 +477,19 @@ static int pycrypto_rsa_legacy_module_exec(PyObject *m) {
   return 0;
 }
 
-static PyModuleDef_Slot pycrypto_rsa_legacy_module_slots[] = {
-    {Py_mod_exec, pycrypto_rsa_legacy_module_exec},
+static PyModuleDef_Slot plain_rsa_key_module_slots[] = {
+    {Py_mod_exec, plain_rsa_key_module_exec},
     {0, NULL},
 };
 
-static struct PyModuleDef pycrypto_rsa_legacy_module = {
+static struct PyModuleDef plain_rsa_key_module = {
     .m_base = PyModuleDef_HEAD_INIT,
     .m_name = "custom",
     .m_doc = "Example module that creates an extension type.",
     .m_size = 0,
-    .m_slots = pycrypto_rsa_legacy_module_slots,
+    .m_slots = plain_rsa_key_module_slots,
 };
 
-PyMODINIT_FUNC PyInit__pycrypto_rsa_legacy(void) {
-  return PyModuleDef_Init(&pycrypto_rsa_legacy_module);
+PyMODINIT_FUNC PyInit__plain_rsa_key(void) {
+  return PyModuleDef_Init(&plain_rsa_key_module);
 }

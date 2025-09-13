@@ -1,10 +1,8 @@
-from .rsa import PlainRSAKey as PythonPlainRSAKey
-
 try:
-    from .rsa import PlainRSAKey as PythonPlainRSAKey
-    from _pycrypto_rsa_legacy import PlainRSAKey as NativeRSAKey
+    from .plain_rsa_key import PlainRSAKey as PythonRSAKey
+    from ._plain_rsa_key import PlainRSAKey as NativeRSAKey
 
-    PlainRSAKey: type[NativeRSAKey] | type[PythonPlainRSAKey] = NativeRSAKey
+    PlainRSAKey: type[NativeRSAKey] | type[PythonRSAKey] = NativeRSAKey
 
 except ImportError:
-    PlainRSAKey = PythonPlainRSAKey
+    PlainRSAKey = PythonRSAKey
