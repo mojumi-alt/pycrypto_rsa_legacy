@@ -5,3 +5,26 @@ requires = ['meson-python']
 [project]
 name = "pycrypto_rsa_legacy"
 version = "0.1.0"
+requires-python = ">= 3.10"
+authors = [
+  {name = "Moritz Milla", email = "80782057+mojumi-alt@users.noreply.github.com"}
+]
+maintainers = [
+  {name = "Moritz Milla", email = "80782057+mojumi-alt@users.noreply.github.com"}
+] 
+description = "A replacement for the plain rsa package of the now dead pycrypto"
+readme = "README.md"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "License :: OSI Approved :: LGPL-3.0",
+]
+
+[tool.cibuildwheel.linux]
+before-all = [
+  "yum install -y gmp-devel || true",
+  "apk add gmp-dev || true"
+]
+
+[tool.cibuildwheel]
+test-command = "python -m unittest discover {project}/tests/ -v"

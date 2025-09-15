@@ -6,7 +6,7 @@
 #define IMPORT_KEY_PARAMETER(value, target)                                    \
   {                                                                            \
     if (value != NULL && !Py_IsNone(value)) {                                  \
-      PyObject *err = importPyObjectToMpz(value, target);                      \
+      PyObject *err = rsa_importPyObjectToMpz(value, target);                  \
       if (err != NULL) {                                                       \
         return NULL;                                                           \
       }                                                                        \
@@ -24,7 +24,7 @@
     if (mpz_size(param) == 0) {                                                \
       Py_RETURN_NONE;                                                          \
     } else {                                                                   \
-      return exportMpzToPyObject(param);                                       \
+      return rsa_exportMpzToPyObject(param);                                   \
     }                                                                          \
   }
 
@@ -38,7 +38,7 @@
       PyErr_SetString(PyExc_TypeError, "Value must be of type 'int'");         \
       return -1;                                                               \
     }                                                                          \
-    PyObject *err = importPyObjectToMpz(value, param);                         \
+    PyObject *err = rsa_importPyObjectToMpz(value, param);                     \
     if (err != NULL) {                                                         \
       return -1;                                                               \
     }                                                                          \
@@ -64,7 +64,7 @@ typedef struct {
   mpz_t u;
 } PlainRSAKey;
 
-static PyObject *importPyObjectToMpz(PyObject *value, mpz_t target) {
+static PyObject *rsa_importPyObjectToMpz(PyObject *value, mpz_t target) {
   size_t byte_count = (_PyLong_NumBits(value) + 7) / 8;
   unsigned char *value_as_bytes =
       PyMem_Calloc(sizeof(unsigned char), byte_count);
@@ -86,7 +86,7 @@ static PyObject *importPyObjectToMpz(PyObject *value, mpz_t target) {
   return NULL;
 }
 
-static PyObject *exportMpzToPyObject(mpz_t value) {
+static PyObject *rsa_exportMpzToPyObject(mpz_t value) {
   size_t *export_buffer_size = PyMem_Malloc(sizeof(size_t));
   unsigned char *export_buffer = mpz_export(NULL, export_buffer_size, 1,
                                             sizeof(unsigned char), 0, 0, value);
@@ -97,7 +97,7 @@ static PyObject *exportMpzToPyObject(mpz_t value) {
   return result;
 }
 
-static PyObject *encrypt(Py_buffer *plaintext, mpz_t e, mpz_t n) {
+static PyObject *rsa_encrypt(Py_buffer *plaintext, mpz_t e, mpz_t n) {
   mpz_t v;
   mpz_init(v);
   mpz_import(v, plaintext->len, 1, plaintext->itemsize, 0, 0, plaintext->buf);
@@ -120,8 +120,8 @@ static PyObject *encrypt(Py_buffer *plaintext, mpz_t e, mpz_t n) {
   return result_obj;
 }
 
-static PyObject *decrypt(Py_buffer *ciphertext, mpz_t d, mpz_t n, mpz_t p,
-                         mpz_t q, mpz_t u) {
+static PyObject *rsa_decrypt(Py_buffer *ciphertext, mpz_t d, mpz_t n, mpz_t p,
+                             mpz_t q, mpz_t u) {
   mpz_t c;
   mpz_init(c);
   mpz_import(c, ciphertext->len, 1, ciphertext->itemsize, 0, 0,
@@ -265,7 +265,7 @@ static PyObject *PlainRSAKey_encrypt(PlainRSAKey *self, PyObject *args) {
     return NULL;
   }
 
-  PyObject *result = encrypt(plaintext, self->e, self->n);
+  PyObject *result = rsa_encrypt(plaintext, self->e, self->n);
   DESTROY_PYBUFFER(plaintext);
   return result;
 }
@@ -289,7 +289,7 @@ static PyObject *PlainRSAKey_decrypt(PlainRSAKey *self, PyObject *args,
   }
 
   PyObject *result =
-      decrypt(ciphertext, self->d, self->n, self->p, self->q, self->u);
+      rsa_decrypt(ciphertext, self->d, self->n, self->p, self->q, self->u);
   DESTROY_PYBUFFER(ciphertext);
   return result;
 }
@@ -313,7 +313,7 @@ static PyObject *PlainRSAKey_verify(PlainRSAKey *self, PyObject *args,
     return NULL;
   }
 
-  PyObject *encrypted = encrypt(signature, self->e, self->n);
+  PyObject *encrypted = rsa_encrypt(signature, self->e, self->n);
   if (encrypted == NULL) {
     DESTROY_PYBUFFER(signature);
     DESTROY_PYBUFFER(message);
@@ -395,7 +395,8 @@ static int PlainRSAKey_set_u(PlainRSAKey *self, PyObject *value,
 
 static PyObject *PlainRSAKey_max_message_length_bits(PlainRSAKey *self,
                                                      void *closure) {
-  return PyLong_FromSize_t(_PyLong_NumBits(exportMpzToPyObject(self->n)) - 1);
+  return PyLong_FromSize_t(_PyLong_NumBits(rsa_exportMpzToPyObject(self->n)) -
+                           1);
 }
 
 static PyObject *PlainRSAKey_is_private_key(PlainRSAKey *self, void *closure) {
