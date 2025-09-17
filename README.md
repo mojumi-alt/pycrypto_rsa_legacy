@@ -1,7 +1,8 @@
 # What is this?
 This is a small python library that contains the legacy plain rsa functions from the now dead pycrypto. This project has no affiliation with pycrypto.
 
-$${\color{red}Plain \space RSA \space is \space insecure, \space do \space not \space use \space it \space for \space new \space projects!}$$
+> **Warning**
+> Plain RSA is insecure, do not use it for new projects!
 
 # Why
 This library might be interesting for you if:
