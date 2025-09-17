@@ -28,3 +28,12 @@ before-all = [
 
 [tool.cibuildwheel]
 test-command = "python -m unittest discover {project}/tests/ -v"
+
+[tool.cibuildwheel.windows]
+archs = ["auto64"]
+before-all = [
+  "vcpkg install"
+]
+environment = { CFLAGS="-IC:\\\\vcpkg\\\\packages\\\\gmp_x64-windows\\\\include", LDFLAGS="-LC:\\\\vcpkg\\\\packages\\\\gmp_x64-windows\\\\lib" }
+before-build = "pip install delvewheel"
+repair-wheel-command = "delvewheel repair --add-path C:\\\\vcpkg\\\\packages\\\\gmp_x64-windows\\\\bin -w {dest_dir} {wheel}"
