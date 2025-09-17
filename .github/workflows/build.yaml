@@ -1,6 +1,12 @@
 name: Python build
 
-on: [push]
+on:
+  push:
+    paths-ignore:
+      - 'LICENSE.LGPL-3.0'
+      - 'LICENSE.MIT'
+      - 'README.md'
+      - '.gitignore'
 
 permissions:
   packages: write

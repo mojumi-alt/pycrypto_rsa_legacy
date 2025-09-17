@@ -6,3 +6,4 @@ __pycache__
 *.so
 wheelhouse
 vcpkg_installed
+build
