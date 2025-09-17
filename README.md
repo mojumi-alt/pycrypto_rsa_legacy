@@ -2,7 +2,7 @@
 This is a small python library that contains the legacy plain rsa functions from the now dead pycrypto. This project has no affiliation with pycrypto.
 
 ```diff
-- Plain RSA is insecure do not use this for new projects, this library is designed to support legacy use cases! -
+- Plain RSA is insecure do not use this for new projects! -
 ```
 
 # Why
