@@ -198,43 +198,21 @@ static PyObject *PlainRSAKey_new(PyTypeObject *type, PyObject *args,
 static PyObject *PlainRSAKey_init(PlainRSAKey *self, PyObject *args,
                                   PyObject *kwargs) {
 
-  PyObject *n = NULL, *e = NULL, *d = NULL, *p = NULL, *q = NULL, *u = NULL,
-           *key = NULL;
-  static char *kwlist[] = {"n", "e", "d", "p", "q", "u", "key", NULL};
-  if (!PyArg_ParseTupleAndKeywords(args, kwargs, "|O!O!O!O!O!O!O", kwlist,
+  PyObject *n = NULL, *e = NULL, *d = NULL, *p = NULL, *q = NULL, *u = NULL;
+  static char *kwlist[] = {"n", "e", "d", "p", "q", "u", NULL};
+  if (!PyArg_ParseTupleAndKeywords(args, kwargs, "|O!O!O!O!O!O!", kwlist,
                                    &PyLong_Type, &n, &PyLong_Type, &e,
                                    &PyLong_Type, &d, &PyLong_Type, &p,
-                                   &PyLong_Type, &q, &PyLong_Type, &u, &key)) {
+                                   &PyLong_Type, &q, &PyLong_Type, &u)) {
     return NULL;
   }
 
-  if (key != NULL && !Py_IsNone(key)) {
-    if (PyObject_HasAttrString(key, "n"))
-      IMPORT_KEY_PARAMETER(PyObject_GetAttrString(key, "n"), self->n);
-
-    if (PyObject_HasAttrString(key, "e"))
-      IMPORT_KEY_PARAMETER(PyObject_GetAttrString(key, "e"), self->e);
-
-    if (PyObject_HasAttrString(key, "d"))
-      IMPORT_KEY_PARAMETER(PyObject_GetAttrString(key, "d"), self->d);
-
-    if (PyObject_HasAttrString(key, "p"))
-      IMPORT_KEY_PARAMETER(PyObject_GetAttrString(key, "p"), self->p);
-
-    if (PyObject_HasAttrString(key, "q"))
-      IMPORT_KEY_PARAMETER(PyObject_GetAttrString(key, "q"), self->q);
-
-    if (PyObject_HasAttrString(key, "u"))
-      IMPORT_KEY_PARAMETER(PyObject_GetAttrString(key, "u"), self->u);
-  } else {
-    IMPORT_KEY_PARAMETER(n, self->n);
-    IMPORT_KEY_PARAMETER(e, self->e);
-    IMPORT_KEY_PARAMETER(d, self->d);
-    IMPORT_KEY_PARAMETER(p, self->p);
-    IMPORT_KEY_PARAMETER(q, self->q);
-    IMPORT_KEY_PARAMETER(u, self->u);
-  }
-
+  IMPORT_KEY_PARAMETER(n, self->n);
+  IMPORT_KEY_PARAMETER(e, self->e);
+  IMPORT_KEY_PARAMETER(d, self->d);
+  IMPORT_KEY_PARAMETER(p, self->p);
+  IMPORT_KEY_PARAMETER(q, self->q);
+  IMPORT_KEY_PARAMETER(u, self->u);
   return 0;
 }
 

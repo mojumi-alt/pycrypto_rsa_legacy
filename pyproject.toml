@@ -27,6 +27,7 @@ before-all = [
 ]
 
 [tool.cibuildwheel]
+before-test = "pip install pycryptodome"
 test-command = "python -m unittest discover {project}/tests/ -v"
 
 [tool.cibuildwheel.windows]

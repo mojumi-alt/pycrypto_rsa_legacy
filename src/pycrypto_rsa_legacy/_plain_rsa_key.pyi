@@ -5,8 +5,7 @@ class PlainRSAKey:
     """
     Represents a plain rsa key that offers various cryptographic functions.
 
-    Build a new rsa key from raw parameters. Use the 'key' parameter
-    to try to import from keys provided by e.g. pycryptodome
+    Build a new rsa key from raw parameters.
 
     Please note that plain rsa is _insecure_ and you should only use this
     for legacy code that does not have another choice.
@@ -21,7 +20,6 @@ class PlainRSAKey:
         p: int | None = ...,
         q: int | None = ...,
         u: int | None = ...,
-        key: typing.Any | None = ...,
     ) -> None: ...
 
     def encrypt(self, plaintext: bytes | str) -> bytes:

@@ -29,10 +29,10 @@ The following table shows the list of currently supported features compared to p
 |:---:|:---:| 
 | encrypt | blind / unblind |
 | decrypt | generate a new rsa key |
-| verify | load key from file (.pem or .der) |
-| sign | save key to file |
+| verify | export key to file  |
+| sign |
 | determine basic key properties
-| load key from pycryptodome key
+| import key (needs pycryptodome)
 
 # Usage
 
@@ -42,9 +42,10 @@ This shows a one-in-all example of how to use the various functions:
 from Crypto.PublicKey import RSA
 from pycrypto_rsa_legacy import PlainRSAKey
 
-# Load key from another crypto implementation...
-private_key = PlainRSAKey(key=RSA.import_key(open("private.pem").read()))
-public_key = PlainRSAKey(key=RSA.import_key(open("public.pem").read()))
+# Load keys from file
+# NOTE: This requires having pycryptodome installed
+private_key = pycrypto_rsa_legacy.import_key(open("private.pem").read())
+public_key = pycrypto_rsa_legacy.import_key(open("public.pem").read())
 
 # ...or by setting the key parameters directly
 # private_key = PlainRSAKey(n=0, d=0, p=0, q=0, u=0) # p, q, u are optional!
